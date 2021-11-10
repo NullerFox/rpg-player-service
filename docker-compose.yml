@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   mongo:
-    image: mongo
+    image: mongo:latest
     hostname: mongo
     container_name: mongo
     restart: on-failure
@@ -11,7 +11,7 @@ services:
       - RPG
 
   player-service:
-    image: tihlok/player-service
+    image: tihlok/player-service:latest
     hostname: player-service
     container_name: player-service
     restart: on-failure

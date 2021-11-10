@@ -1,0 +1,33 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="player-service [app]" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+        <module name="players-service"/>
+        <extension name="coverage" runner="jacoco">
+            <pattern>
+                <option name="PATTERN" value="com.nullerfox.playerservice.*"/>
+                <option name="ENABLED" value="true"/>
+            </pattern>
+            <pattern>
+                <option name="PATTERN" value="com.nullerfox.playerservice.PlayerServiceApplication"/>
+                <option name="ENABLED" value="true"/>
+            </pattern>
+        </extension>
+        <extension name="net.ashald.envfile">
+            <option name="IS_ENABLED" value="false"/>
+            <option name="IS_SUBST" value="false"/>
+            <option name="IS_PATH_MACRO_SUPPORTED" value="false"/>
+            <option name="IS_IGNORE_MISSING_FILES" value="false"/>
+            <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false"/>
+            <ENTRIES>
+                <ENTRY IS_ENABLED="true" PARSER="runconfig"/>
+            </ENTRIES>
+        </extension>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="com.nullerfox.playerservice.PlayerServiceApplication"/>
+        <option name="ALTERNATIVE_JRE_PATH"/>
+        <option name="SHORTEN_COMMAND_LINE" value="NONE"/>
+        <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateClassesAndResources"/>
+        <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources"/>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>

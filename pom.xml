@@ -14,23 +14,60 @@
 
     <groupId>com.nullerfox</groupId>
     <artifactId>player-service</artifactId>
-    <version>0.0.2</version>
+    <version>0.1.0</version>
+    <packaging>jar</packaging>
     <name>player-service</name>
     <description>player-service</description>
 
     <properties>
         <java.version>17</java.version>
+        <maven.version>3.3.9</maven.version>
+
+        <surefire.plugin.version>2.22.2</surefire.plugin.version>
+        <failsafe.plugin.version>2.22.2</failsafe.plugin.version>
+        <idea.plugin.version>2.2.1</idea.plugin.version>
+        <enforcer.plugin.version>3.0.0</enforcer.plugin.version>
+        <jib.plugin.version>3.1.4</jib.plugin.version>
+        <sonar.plugin.version>3.7.0.1746</sonar.plugin.version>
+        <jacoco.plugin.version>0.8.7</jacoco.plugin.version>
+        <checkstyle.plugin.version>3.1.2</checkstyle.plugin.version>
+
+        <spring-boot.version>2.5.6</spring-boot.version>
+        <jackson.version>2.13.0</jackson.version>
+        <lombok.version>1.18.22</lombok.version>
+        <mongo-server.version>1.38.0</mongo-server.version>
+        <checkstyle.version>8.43</checkstyle.version>
+        <nohttp-checkstyle.version>0.0.10</nohttp-checkstyle.version>
+
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <start-class>com.nullerfox.playerservice.PlayerServiceApplication</start-class>
+        <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
 
         <sonar.projectKey>rpg-player-service</sonar.projectKey>
         <sonar.organization>nullerfox</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>
-        <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-        <sonar.inclusions>
-            com.nullerfox.playerservice.*
-        </sonar.inclusions>
+        <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+        <sonar.sources>src/main/</sonar.sources>
+        <sonar.tests>src/test/</sonar.tests>
+        <sonar.java.binaries>target</sonar.java.binaries>
+        <sonar.java.test.binaries>target</sonar.java.test.binaries>
+        <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
+        <sonar.junit.reportPaths>
+            target/surefire-reports,
+            target/failsafe-reports
+        </sonar.junit.reportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>
+            target/site/**/jacoco*.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
         <sonar.exclusions>
-            com.nullerfox.playerservice.PlayerServiceApplication
+            **/PlayerServiceApplication.java,
+            **/entity/*.java,
+            **/dto/*.java
         </sonar.exclusions>
     </properties>
 
@@ -38,10 +75,51 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring-boot.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.bwaldvogel</groupId>
+            <artifactId>mongo-java-server</artifactId>
+            <version>${mongo-server.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -52,27 +130,94 @@
                 <plugin>
                     <groupId>org.sonarsource.scanner.maven</groupId>
                     <artifactId>sonar-maven-plugin</artifactId>
-                    <version>3.7.0.1746</version>
+                    <version>${sonar.plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-idea-plugin</artifactId>
+                <version>${idea.plugin.version}</version>
+                <configuration>
+                    <exclude>node_modules</exclude>
+                </configuration>
             </plugin>
             <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.plugin.version}</version>
                 <configuration>
-                    <reuseForks>false</reuseForks>
-                    <forkCount>1</forkCount>
+                    <runOrder>alphabetical</runOrder>
+                    <excludes>
+                        <exclude>**/*IT*</exclude>
+                        <exclude>**/*IntTest*</exclude>
+                    </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${failsafe.plugin.version}</version>
+                <configuration>
+                    <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                    <runOrder>alphabetical</runOrder>
+                    <includes>
+                        <include>**/*IT*</include>
+                        <include>**/*IntTest*</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.7</version>
+                <version>${jacoco.plugin.version}</version>
                 <executions>
+                    <execution>
+                        <id>pre-unit-tests</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>pre-integration-tests</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-integration-tests</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report-integration</goal>
+                        </goals>
+                    </execution>
                     <execution>
                         <id>default-prepare-agent</id>
                         <goals>
@@ -85,13 +230,96 @@
                             <goal>report</goal>
                         </goals>
                     </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${checkstyle.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>io.spring.nohttp</groupId>
+                        <artifactId>nohttp-checkstyle</artifactId>
+                        <version>${nohttp-checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <includes>pom.xml,README.md</includes>
+                    <excludes>.git/**/*,target/**/*,node_modules/**/*,node/**/*</excludes>
+                    <sourceDirectories>./</sourceDirectories>
+                </configuration>
+                <executions>
                     <execution>
-                        <id>default-check</id>
                         <goals>
                             <goal>check</goal>
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib.plugin.version}</version>
+                <configuration>
+                    <from>
+                        <image>openjdk:17-alpine</image>
+                    </from>
+                    <to>
+                        <image>docker.io/tihlok/player-service</image>
+                        <tags>
+                            <tag>${project.version}</tag>
+                            <tag>latest</tag>
+                        </tags>
+                    </to>
+                    <container>
+                        <jvmFlags>
+                            <jvmFlag>-Dspring.profiles.active=docker</jvmFlag>
+                        </jvmFlags>
+                    </container>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${enforcer.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>enforce-dependencyConvergence</id>
+                        <configuration>
+                            <rules>
+                                <DependencyConvergence/>
+                            </rules>
+                            <fail>false</fail>
+                        </configuration>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <rules>
+                        <requireMavenVersion>
+                            <message>You are running an older version of Maven. Required at least Maven ${maven.version}</message>
+                            <version>[${maven.version},)</version>
+                        </requireMavenVersion>
+                        <requireJavaVersion>
+                            <message>You are running an incompatible version of Java. Required JDK 17+</message>
+                            <version>[17,18)</version>
+                        </requireJavaVersion>
+                    </rules>
+                </configuration>
             </plugin>
         </plugins>
     </build>

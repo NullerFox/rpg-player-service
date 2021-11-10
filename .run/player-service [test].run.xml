@@ -1,0 +1,33 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="player-service [test]" type="JUnit" factoryName="JUnit">
+        <module name="players-service"/>
+        <extension name="coverage" runner="jacoco">
+            <pattern>
+                <option name="PATTERN" value="com.nullerfox.playerservice.PlayerServiceApplication"/>
+                <option name="ENABLED" value="true"/>
+                <option name="INCLUDE" value="false"/>
+            </pattern>
+            <pattern>
+                <option name="PATTERN" value="com.nullerfox.playerservice.*"/>
+                <option name="ENABLED" value="true"/>
+            </pattern>
+        </extension>
+        <extension name="net.ashald.envfile">
+            <option name="IS_ENABLED" value="false"/>
+            <option name="IS_SUBST" value="false"/>
+            <option name="IS_PATH_MACRO_SUPPORTED" value="false"/>
+            <option name="IS_IGNORE_MISSING_FILES" value="false"/>
+            <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false"/>
+            <ENTRIES>
+                <ENTRY IS_ENABLED="true" PARSER="runconfig"/>
+            </ENTRIES>
+        </extension>
+        <option name="PACKAGE_NAME" value="com.nullerfox.playerservice"/>
+        <option name="MAIN_CLASS_NAME" value=""/>
+        <option name="METHOD_NAME" value=""/>
+        <option name="TEST_OBJECT" value="package"/>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>

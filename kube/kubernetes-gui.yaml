@@ -96,11 +96,11 @@ rules:
     verbs: ["get", "update"]
     # Allow Dashboard to get metrics.
   - apiGroups: [""]
-    resources: ["services"]
+    resources: [ "service" ]
     resourceNames: ["heapster", "dashboard-metrics-scraper"]
-    verbs: ["proxy"]
+    verbs: [ "*" ]
   - apiGroups: [""]
-    resources: ["services/proxy"]
+    resources: [ "service/proxy" ]
     resourceNames: ["heapster", "http:heapster:", "https:heapster:", "dashboard-metrics-scraper", "http:dashboard-metrics-scraper"]
     verbs: ["get"]
 
