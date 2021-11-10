@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo
+    hostname: mongo
+    container_name: mongo
+    restart: on-failure
+    ports:
+      - "27017:27017"
+    networks:
+      - RPG
+
+  player-service:
+    image: tihlok/player-service
+    hostname: player-service
+    container_name: player-service
+    restart: on-failure
+    ports:
+      - "29001:29001"
+    networks:
+      - RPG
+
+networks:
+  RPG:
+    driver: bridge
